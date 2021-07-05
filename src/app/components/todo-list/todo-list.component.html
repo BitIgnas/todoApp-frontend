@@ -1,0 +1,174 @@
+<div class="container page-todo bootstrap snippets bootdeys">
+    <div class="row">
+    <div class="col-sm-8 tasks">
+        <div class="task-list">
+            <div class="container-fluid p-1 m-1">
+                <div class="">
+                  <h2 class="d-inline">Tasks:</h2>
+                  <button class="d-inline float-right btn btn-primary button" (click)="displayForm()" >Add Todo</button>
+                  <button class="d-inline float-right btn btn-warning" (click)="logOut()">Log out</button>
+                </div>
+              </div>
+            <div class="priority high"><span>high priority</span></div>
+            <div class="task high" *ngFor="let todo of (highPriorityTodos$ | async)">
+                <div class="desc">
+                    <div class="title">{{ todo.name }}</div>
+                    <div>{{ todo.description}}</div>
+                </div>
+                <div class="time">
+                    <div class="d-flex flex-row ps-5">
+                        <div>
+                            <button class="icon ps-5" (click)="showEdit(todo.id)">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="icon ms-2" (click)="deleteTodo(todo.name, todo.id)">
+                                <i class="fas fa-times icon"></i>
+                            </button>
+                        </div>
+    
+                       
+                    </div>
+                    
+                </div>
+            </div>
+            
+    
+            <div class="priority medium"><span>medium priority</span></div>
+    
+            <div class="task medium" *ngFor="let todo of (mediumPriorityTodos$ | async)">
+                <div class="desc">
+                    <div class="title">{{todo.name}}</div>
+                    <div>{{todo.description}}</div>
+                </div>
+                <div class="time">
+                    <div class="d-flex flex-row ps-5">
+                        <div>
+                            <button class="icon ps-5" (click)="showEdit(todo.id)">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="icon ms-2" (click)="deleteTodo(todo.name, todo.id)">
+                                <i class="fas fa-times icon"></i>
+                            </button>
+                        </div>
+    
+                       
+                    </div>
+                  
+                </div>
+            </div>
+            
+    
+            <div class="priority low"><span>low priority</span></div>
+    
+            <div class="task low" *ngFor="let todo of (lowPriorityTodos$ | async)">
+                <div class="desc">
+                    <div class="title">{{todo.name}}</div>
+                    <div>{{todo.description}}</div>
+                </div>
+                <div class="time">
+                    <div class="d-flex flex-row ps-5">
+                        <div>
+                            <button class="icon ps-5" (click)="showEdit(todo.id)">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <button class="icon ms-2" (click)="deleteTodo(todo.name, todo.id)">
+                                <i class="fas fa-times icon"></i>
+                            </button>
+                        </div>
+    
+                       
+                    </div>
+                 
+                </div>
+            </div>
+
+            <div class="clearfix"></div>		
+        </div>		
+    </div>
+    <div class="col-sm-4" *ngIf="showForm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="todolist not-done p-1 m-1">
+                        <form (ngSubmit)="onSubmit()" #todoForm="ngForm" novalidate>
+                            <div class="row custom-row d-inline">
+                                <span class="form-heading">ADD TODO:</span>
+                        <input type="text" name="name" class="form-control add-todo mb-2" placeholder="name" ngModel [(ngModel)]=todo.name>
+                        <input type="text" name="description" class="form-control add-todo mb-2" placeholder="description" ngModel [(ngModel)]=todo.description>
+                            </div>
+
+                            <h5>Priority:</h5>
+                            <div class="d-flex flex-row ">
+                                
+                                <input type="radio" class="btn-check m-2 btn-danger" name="priority" id="high" value="HIGH" ngModel [(ngModel)]=todo.priority>
+                                <label class="btn btn-sm btn-outline-danger m-1" for="high">HIGH</label>
+    
+                                <input type="radio" class="btn-check m-2" name="priority" id="medium"  value="MEDIUM" [(ngModel)]=todo.priority>
+                                <label class="btn btn-sm btn-outline-warning m-1" for="medium">MEDIUM</label>
+    
+                                <input type="radio" class="btn-check  m-2" name="priority" id="low" value="LOW" [(ngModel)]=todo.priority>
+                                <label class="btn btn-sm btn-outline-success m-1" for="low">LOW</label>
+                           </div>
+
+
+                           <div class="d-flex flex-row">
+                            <button type="submit" id="checkAll" class="btn btn-success mt-4 m-1">Add</button>
+                            <button type="button" id="checkAll" class="btn btn-danger mt-4 m-1" (click)="closeAddForm()" >Close</button>
+                        </div>
+                            
+                           
+                        </form> 
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4" *ngIf="showEditForm">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="todolist not-done p-1 m-1">
+                        <form (ngSubmit)="onEditFormSubmit()" #todoForm="ngForm" novalidate>
+                            <div class="row custom-row d-inline">
+                                <span class="form-heading">EDIT TODO:</span>
+                        <input type="text" name="name" class="form-control add-todo mb-2" ngModel [(ngModel)]="tempTodo.name" >
+                        <input type="text" name="description" class="form-control add-todo mb-2" placeholder="description" ngModel [(ngModel)]="tempTodo.description">
+                            </div>
+
+                            <h5>Priority:</h5>
+                            <div class="d-flex flex-row ">
+                                
+                                <input type="radio" class="btn-check m-2 btn-danger" name="priority" id="high" value="HIGH" ngModel [(ngModel)]="tempTodo.priority">
+                                <label class="btn btn-sm btn-outline-danger m-1" for="high">HIGH</label>
+    
+                                <input type="radio" class="btn-check m-2" name="priority" id="medium"  value="MEDIUM" ngModel [(ngModel)]="tempTodo.priority">
+                                <label class="btn btn-sm btn-outline-warning m-1" for="medium">MEDIUM</label>
+    
+                                <input type="radio" class="btn-check  m-2" name="priority" id="low" value="LOW" ngModel [(ngModel)]="tempTodo.priority">
+                                <label class="btn btn-sm btn-outline-success m-1" for="low">LOW</label>
+                           </div>
+
+
+                            <div class="d-flex flex-row">
+                                <button type="submit" id="checkAll" class="btn btn-success mt-4 m-1">Edit</button>
+                                <button type="submit" id="checkAll" class="btn btn-danger mt-4 m-1" (click)="closeEditForm()">Close</button>
+                            </div>
+
+                        </form> 
+                     </div>
+                 </div>
+
+              </div>
+             </div>
+        </div>
+    
+    </div>
+</div>
